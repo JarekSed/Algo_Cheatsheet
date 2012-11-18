@@ -1,0 +1,139 @@
+\documentclass[12pt,twocolumn]{article}
+\usepackage{url,graphicx,tabularx,array,amsmath}
+\usepackage{enumitem}
+\setlist{nolistsep} %-- don't have lists take up shitloads of room
+\setlength{\parskip}{1ex} %--skip lines between paragraphs
+\setlength{\parindent}{0pt} %--don't indent paragraphs
+\usepackage[
+top    = 0.75cm,
+bottom = 0.50cm,
+left   = 0.50cm,
+right  = 0.50cm]{geometry}
+
+%-- Commands for header
+\renewcommand{\title}[1]{\textbf{#1}}
+\renewcommand{\line}{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}\hline\\\end{tabularx}\\[-0.5cm]}
+\newcommand{\leftright}[2]{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}#1%
+& #2\\\end{tabularx}}
+
+%\linespread{2} %-- Uncomment for Double Space
+\begin{document}
+
+\section{Master Theorem}
+Given $T(1) = c$.\\
+\[T(n) = a * T\left(\frac{n}{b}\right) + d*f(n), \mbox{for multiplicative f}\]
+\begin{align}
+    \Theta(n^{\log_{b} a}) \mbox{ if }a \ge f(b)\\
+    \Theta(f(n)) \mbox{ if } f(b) > a\\
+    \Theta(n^{\log_{b} a}* \log n) \mbox{ if } f(b) = a
+\end{align}
+\section{Multiplicative}
+$f(x)$ is multiplicative iff $f(xy) =  f(x) * f(y)$.\\
+For example, $f(x) = x^2$ is multiplicative.\\
+$f(x) = 2x$ is not multiplicative.
+
+\section{Big O}
+
+$ f(x) \mbox{ is } O(g(x)) => \lim_{x \to \infty}{\frac{f(x)}{g(x)}} \le c \mbox{ for some constant c}$\\
+$ f(x) \mbox{ is } \Omega(g(x)) => \lim_{x \to \infty}{\frac{f(x)}{g(x)}} \ge c \mbox{ for some constant c}$\\
+$ f(x) \mbox{ is } \Theta(g(x)) => \lim_{x \to \infty}{\frac{f(x)}{g(x)}} = c \mbox{ for some constant c}$\\
+
+\section{Random Facts}
+\begin{enumerate}
+    \item You can multiply in $\Theta(n^{\log_2 3})$.
+    \item Bubble sort is worst case $\Theta(n^2)$ and best case $\Theta(n)$ and average case $\Theta(n^2)$ - Stable, In place
+    \item Merge sort is $\Theta(n \log n)$ for all cases. - Stable, Not in place
+    \item Quick sort is worst case $\Theta(n^2)$ and best case $\Theta(n \log n)$. - Not stable, In place
+    \item Randomized quick sort is expected $\Theta(n \log n)$. Same as quicksort
+    \item You can sort (comparitively) no faster than $O(n \log n)$
+        \begin{enumerate}
+            \item A decision tree for sorting has $>= n!$ leaves. This is because we have at least $n!$ different inputs for a sorting algorithm (one for each permutation of input).
+            \item Minimum average depth of a tree with $k$ leaves is $\Omega(\log k)$. So if a decision tree has $n!$ leaves, it must have $\log n!$ depth, which is $\Omega(n \log n)$.
+        \end{enumerate}
+    \item Non Comparision Sorting
+        \begin{enumerate}
+            \item Bucket Sort/Bin Sort - hash your key to a bucket. Add it to the linked list for the hashed bucket. Now iterate through buckets, and print out each linked list in order. Requires a bounded input set. $\Theta(n)$ where $n$ is the number of possible inputs. - Stable, Not in place
+            \item Radix Sort - Bin Sort based on the least significant digit until you run out of digits. Requires a bounded input set. If we sort $n$ numbers in base $m$ and they are each $k$ digits long, it takes $O(k(n + m))$ - Stable, Not in place
+        \end{enumerate}
+\end{enumerate}
+
+\section{QuickSelect}
+This takes in an array, and finds the $k$th largest element in the array.
+\begin{enumerate}
+    \item Split array into subarrays of size 5. Find the median of each subarray. This takes $O(n)$ comps.
+    \item Find the median of the medians of all the subarrays recursively. This median must be bigger than $\frac{3n}{10}$ elements and smaller than $\frac{n}{10}$ elements.
+    \item This tells us $T(n) = T(\frac{n}{5}) + T(\frac{3n}{10}) + n = \Theta(n)$
+\end{enumerate}
+
+\section{Graphs}
+\begin{enumerate}
+    \item A simple path is a path without cycles
+    \item A subgraph is strongly connected if you can get from all nodes in it to all other nodes.
+    \item A subgraph is weakly connected if its directed, but would be strongly connected if it was undirected.
+    \item Trees have $n-1$ edges. Have at most $n-1$ leaves. Has an average depth of $\log_2 n$
+    \item Adjacency Matrix is used to represent dense graphs, Adjacency linked lists are used to represent sparse graphs.
+\end{enumerate}
+
+
+
+\subsection{Minimal Spanning Tree}
+Greedy Algorithm
+\begin{enumerate}
+    \item Initialize all nodes to be infinite distance so far $O(n)$
+    \item Assume we have a MST so far.
+    \item Add the cheapest edge to the MST that adds a node we haven't seen before.
+    \item loop over steps 2-3 $O(n)$
+\end{enumerate}
+$O(n^2)$ total\\
+
+
+Kruskall's Algorithm
+\begin{enumerate}
+    \item Sort edges by weight. $O(logn^m) = O(m\log{n})$
+    \item Add an edge to MST if it connects two subgraphs that aren't already connected. $O(n\log{n})$ for
+        unions ($O(\log{n}$ and we do it $n$ times) and $O(m)$ for finds (O(1) and we do it $m$ times), so total for this step is $O(n\log{n}+m)$
+\end{enumerate}
+
+Use Union Find for Step \#2. Complexity $m \log n$, where $m$ is the number of edges.
+
+\subsection{Dijkstras Algorithm}
+\begin{enumerate}
+    \item Assume we have shortest paths for everything we've seen so far
+    \item Choose the edge that minimizes the full path to a vertex we haven't seen yet.
+    \item $O(n^2)$ to find paths from one node to all others, $O(n^3)$ to find for all nodes.
+    \item Basically, just like Greedy, but we minimize path to node + new edge, not just new edge
+\end{enumerate}
+
+\subsection{Floyd's Algorithm}
+\begin{enumerate}
+    \item Floyd's algorithm computes all pairs shortest path given a graph without negative cycles.
+    \item It runs in $O(n^3)$ time, takes $O(n^2)$ space.
+    \item It sets all distances to $\inf$. Visits each node, and updates the distance to the node if we have a shorter path.
+\end{enumerate}
+
+Clique is a subgraph in a graph in which all nodes are connected to each other directly.
+Independent set is a subgraph in a graph in which no nodes are connected to each other at all.
+
+MAX-CLIQUE - Iterate from i=n to 1 and call Clique(G, i) on it
+FIND-CLIQUE - remove nodes, and check to see if Clique still exists
+
+LCA - Lowest Common Ancestor
+RMQ - Range Minimum Query
+
+Euler Tour - Write down each node as you visit it during an in order traversal. Size 2n - 1.
+Cartesian Trees - An in order traversal of the tree should return the input array. Every node must be smaller than its children. Construction takes $O(n)$.
+
+RMQ \& LCA - can be solved in $O(n)$ preprocess $O(1)$ query. LCA(Cartesian Tree(Array)) = RMQ(Array)
+
+\subsection{DFS}
+\begin{enumerate}
+    \item Takes $O(n+m)$ time.
+    \item Finds connected components.
+    \item Tells you if you have a DAG (Directed Acyclic Graph) - If the DFS contains back edges, then you have a DAG.
+    \item Top sort - Number edges from $n$ to 1 as you finish DFS at a vertex.
+    \item Strongly Connected Components - Top Sort, reverse edges, run DFS in order of Top Sort.
+\end{enumerate}
+
+
+
+\end{document}

@@ -62,7 +62,7 @@ This takes in an array, and finds the $k$th largest element in the array.
 \begin{enumerate}
     \item Split array into subarrays of size 5. Find the median of each subarray. This takes $O(n)$ comps.
     \item Find the median of the medians of all the subarrays recursively. This median must be bigger than $\frac{3n}{10}$ elements and smaller than $\frac{n}{10}$ elements.
-    \item This tells us $T(n) = T(\frac{n}{5}) + T(\frac{3n}{10}) + n = \Theta(n)$
+    \item This tells us $T(n) = T(\frac{n}{5}) + T(\frac{7n}{10}) + n = \Theta(n)$
 \end{enumerate}
 
 \section{Graphs}
@@ -129,7 +129,7 @@ RMQ \& LCA - can be solved in $O(n)$ preprocess $O(1)$ query. LCA(Cartesian Tree
 \begin{enumerate}
     \item Takes $O(n+m)$ time.
     \item Finds connected components.
-    \item Tells you if you have a DAG (Directed Acyclic Graph) - If the DFS contains back edges, then you have a DAG.
+    \item Tells you if you have a DAG (Directed Acyclic Graph) - If the DFS contains back edges, then you have a cycle.
     \item Top sort - Number edges from $n$ to 1 as you finish DFS at a vertex.
     \item Strongly Connected Components - Top Sort, reverse edges, run DFS in order of Top Sort.
 \end{enumerate}

@@ -134,6 +134,45 @@ RMQ \& LCA - can be solved in $O(n)$ preprocess $O(1)$ query. LCA(Cartesian Tree
     \item Strongly Connected Components - Top Sort, reverse edges, run DFS in order of Top Sort.
 \end{enumerate}
 
+\subsection{Integers}
+
+Interface for these structures is as follows
+\begin{enumerate}
+    \item Insert(x $\in$ U)
+    \item Delete(x $\in$ S)
+    \item Predecessor(x $\in$ U)
+    \item Successor(x $\in$ U)
+    \item w here is the number of bits in your key (32 for integers).
+    \item N here is the maximum range of your key. ($2^{32}$ for integers).
+    \item n here is the number of elements in your data structure. (like $O(n)$ time to insert into a linked list).
+\end{enumerate}
+
+Van emde Boas Trees - Does everything in $O(\log w)$ or $O(\log \log N)$ time.
+
+Fusion Trees - Do everything in $O(\log_{w}{n})$ time or $O(\frac{\log{n}}{\log{w}})$ time.
+
+You can sort using these in $n * $min$(\log w, \log_{w}{n})$ time.
+
+Both take $O(N)$ space.
+
+A van emde boas tree that stores $N$ things contains
+\begin{enumerate}
+    \item min and max of its elements.
+    \item $\sqrt{N}$ van emde boas trees that each store $\sqrt{N}$ things - We will call these the buckets.
+    \item A summary tree stores $\sqrt{N}$ things. These things are the indexes of the above that are nonempty.
+\end{enumerate}
+
+To insert/delete a number, you split up the higher and lower order bits of the input. You use the high order bits to determine which bucket to put the number in. We will then recurisvely insert/delete the lower-order bits into that bucket (tree), and update min/max.
+
+To successor a number, you compare to min/max. If it's between min and max, you split the bits and index with high order bits into a bucket. Compare to min/max of the bucket. If it's between min/max, recursively call successor on bucket using low order bits. If it's less than min, return min. If it's greater than max, recursively call the summary widget using the high order bits to find the next non empty bucket and return its min.
+
+The trick here is that if you make one recursive call on input of size $O(\sqrt{N}$, you get $O(\log \log N)$ time.
+
+\subsection{NP Completeness}
+\begin{enumerate}
+    \item A decision problem is in NP if it has a polynomial length proof and is checkable in polynomial time.
+\end{enumerate}
+
 
 
 \end{document}
